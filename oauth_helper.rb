@@ -2,14 +2,7 @@ module OAuthHelper
   enable :sessions
 
   get '/oauth/auth' do
-    consumer = OAuth::Consumer.new(
-      settings.oauth_consumer_key,
-      settings.oauth_consumer_secret,
-      {
-        :site => settings.oauth_site,
-      })
-
-    request_token = consumer.get_request_token(:oauth_callback => url('/oauth/cb'))
+    request_token = oauth_consumer.get_request_token(:oauth_callback => url('/oauth/cb'))
     session[:request_token] = request_token
     redirect request_token.authorize_url
   end
