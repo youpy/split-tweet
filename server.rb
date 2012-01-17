@@ -36,7 +36,7 @@ get '/update' do
   twitter = Twitter::Client.new
 
   status.split(//).reverse.each do |c|
-    twitter.update padding(5) + c + ' ' + padding(130)
+    twitter.update padding(5) + c + padding(130)
   end
 
   haml :updated
