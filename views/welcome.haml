@@ -2,8 +2,9 @@
   %head
     %title Split Tweet
   %body
-    %form{:action => '/update', :method => 'GET' }
+    %form{:action => '/update', :method => 'POST' }
       %p
         %textarea{:name => 'status'}
       %p
+        = Rack::Csrf.tag(env)
         %input{:type => 'submit', :value => 'split & tweet'}

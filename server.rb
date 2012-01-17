@@ -9,6 +9,8 @@ set :oauth_consumer_secret, ENV['OAUTH_CONSUMER_SECRET']
 set :oauth_site, 'https://api.twitter.com/'
 set :oauth_redirect_to, '/welcome'
 
+use Rack::Csrf, :raise => true
+
 def padding(num)
   (0...num).to_a.map { [0x200b, 0x200c].sort_by { rand }.first }.pack('U*')
 end
@@ -21,7 +23,7 @@ get '/welcome' do
   haml :welcome
 end
 
-get '/update' do
+post '/update' do
   status = params[:status] || ''
   access_token_key = session[:access_token_key]
   access_token_secret = session[:access_token_secret]
