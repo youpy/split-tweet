@@ -9,6 +9,10 @@ set :oauth_consumer_secret, ENV['OAUTH_CONSUMER_SECRET']
 set :oauth_site, 'https://api.twitter.com/'
 set :oauth_redirect_to, '/welcome'
 
+def padding(num)
+  (0...num).to_a.map { [0x200b, 0x200c].sort_by { rand }.first }.pack('U*')
+end
+
 get '/' do
   haml :index
 end
@@ -32,8 +36,7 @@ get '/update' do
   twitter = Twitter::Client.new
 
   status.split(//).reverse.each do |c|
-    paddings = (0...130).to_a.map { [0x200b, 0x200c].sort_by { rand }.first }
-    twitter.update c + ' ' + paddings.pack('U*') + ''
+    twitter.update padding(5) + c + ' ' + padding(130)
   end
 
   haml :updated
