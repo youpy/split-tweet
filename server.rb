@@ -1,10 +1,12 @@
 require './oauth_helper'
 
+$KCODE = 'u'
+
 include OAuthHelper
 
-set :oauth_consumer_key, ''
-set :oauth_consumer_secret, ''
-set :oauth_site, ''
+set :oauth_consumer_key, ENV['OAUTH_CONSUMER_KEY']
+set :oauth_consumer_secret, ENV['OAUTH_CONSUMER_SECRET']
+set :oauth_site, 'https://api.twitter.com/'
 set :oauth_redirect_to, '/welcome'
 
 get '/' do
@@ -12,8 +14,26 @@ get '/' do
 end
 
 get '/welcome' do
-  #access_token_key = session[:access_token_key]
-  #access_token_secret = session[:access_token_secret]
-  #access_token = OAuth::AccessToken.new(oauth_consumer, access_token_key, access_token_secret)
   haml :welcome
+end
+
+get '/update' do
+  status = params[:status] || ''
+  access_token_key = session[:access_token_key]
+  access_token_secret = session[:access_token_secret]
+  access_token = OAuth::AccessToken.new(oauth_consumer, access_token_key, access_token_secret)
+
+  Twitter.configure do |config|
+    config.consumer_key = settings.oauth_consumer_key
+    config.consumer_secret = settings.oauth_consumer_secret
+    config.oauth_token = access_token_key
+    config.oauth_token_secret = access_token_secret
+  end
+  twitter = Twitter::Client.new
+
+  status.split(//).each do |c|
+    twitter.update c + ' ' + ([0x200b] * rand(130)).pack('U*') + ''
+  end
+
+  haml :updated
 end

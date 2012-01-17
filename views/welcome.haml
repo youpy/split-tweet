@@ -1,5 +1,9 @@
 %html
   %head
-    %title Connected
+    %title Split Tweet
   %body
-    %h1 Connected
+    %form{:action => '/update', :method => 'GET' }
+      %p
+        %textarea{:name => 'status'}
+      %p
+        %input{:type => 'submit', :value => 'split & tweet'}
