@@ -32,7 +32,8 @@ get '/update' do
   twitter = Twitter::Client.new
 
   status.split(//).each do |c|
-    twitter.update c + ' ' + ([0x200b] * rand(130)).pack('U*') + ''
+    paddings = (0...130).to_a.map { [0x200b, 0x200c].sort_by { rand }.first }
+    twitter.update c + ' ' + paddings.pack('U*') + ''
   end
 
   haml :updated
