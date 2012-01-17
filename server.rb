@@ -10,6 +10,10 @@ set :oauth_site, 'https://api.twitter.com/'
 set :oauth_redirect_to, '/welcome'
 
 get '/' do
+  if session[:access_token_key]
+    redirect_to '/update'
+  end
+
   haml :index
 end
 
