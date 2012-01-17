@@ -31,7 +31,7 @@ get '/update' do
   end
   twitter = Twitter::Client.new
 
-  status.split(//).each do |c|
+  status.split(//).reverse.each do |c|
     paddings = (0...130).to_a.map { [0x200b, 0x200c].sort_by { rand }.first }
     twitter.update c + ' ' + paddings.pack('U*') + ''
   end
